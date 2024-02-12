@@ -1,6 +1,6 @@
 'use client';
 
-import { titleFont } from '@/config/font';
+import { titleFont } from '@/config/fonts';
 import { useUIStore } from '@/store';
 import Link from 'next/link';
 import React from 'react';
@@ -35,7 +35,7 @@ export const TopMenu = () => {
         </Link>
         <Link
           className="m-2 p-2 rounded-md transition-all hover:bg-gray-100"
-          href="/category/kids"
+          href="/category/kid"
         >
           Kids
         </Link>

@@ -1,10 +1,10 @@
-import { titleFont } from '@/config/font';
+import { titleFont } from '@/config/fonts';
 import { HTMLProps } from 'react';
 
 interface Props {
   title: string;
   subtitle?: string;
-  className: HTMLProps<HTMLElement>['className'];
+  className?: HTMLProps<HTMLElement>['className'];
 }
 
 export const Title = ({ title, className, subtitle }: Props) => {
