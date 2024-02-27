@@ -29,12 +29,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: labels[gender]
       ? `Clothes for ${labels[gender]}`
       : 'Clothes for people',
-    openGraph: {
-      title: labels[gender] ?? labels['unisex'],
-      description: labels[gender]
-        ? `Clothes for ${labels[gender]}`
-        : 'Clothes for people',
-    },
   };
 }
 

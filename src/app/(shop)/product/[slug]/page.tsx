@@ -4,13 +4,12 @@ import { getProductBySlug } from '@/actions';
 import {
   ProductMobileSlideshow,
   ProductSlideshow,
-  QuantitySelector,
-  SizeSelector,
   StockLabel,
 } from '@/components';
 import { titleFont } from '@/config/fonts';
-import { Metadata, ResolvingMetadata } from 'next';
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { AddToCart } from './ui/AddToCart';
 
 interface Props {
   params: {
@@ -28,11 +27,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: product?.title ?? 'Producto no encontrado',
     description: product?.description ?? '',
-    openGraph: {
-      title: product?.title ?? 'Producto no encontrado',
-      description: product?.description ?? '',
-      images: [`/products/${product?.images[1]}`],
-    },
+    // openGraph: {
+    //   title: product?.title ?? 'Producto no encontrado',
+    //   description: product?.description ?? '',
+    // images: [`/products/${product?.images[1]}`],
+    // },
   };
 }
 
@@ -62,22 +61,14 @@ export default async function ProductPage({ params }: Props) {
         />
       </div>
       {/* Product Details */}
-      <div className="col-span-1 px-5">
+      <div className="relative col-span-1 px-5">
         <StockLabel slug={product.slug} />
         <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>
           {product.title}
         </h1>
         <p className="text-lg mb-5">${product.price}</p>
 
-        {/* Sizes selector */}
-        <SizeSelector
-          selectedSize={product.sizes[1]}
-          availableSizes={product.sizes}
-        />
-        {/* Quantity selector */}
-        <QuantitySelector quantity={2} />
-
-        <button className="btn-primary my-5">Add to cart</button>
+        <AddToCart product={product} />
 
         {/* Description */}
         <h3 className="font-bold text-sm">Description</h3>
