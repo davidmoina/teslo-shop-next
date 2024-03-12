@@ -4,23 +4,24 @@ import { QuantitySelector } from '@/components';
 import { useCartStore } from '@/store';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export const ProductsInCart = () => {
   //* if hydration fails uncomment the following code
-  // const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const productsInCart = useCartStore((state) => state.cart);
   const updateProductQuantity = useCartStore(
     (state) => state.updateProductQuantity
   );
   const removeProduct = useCartStore((state) => state.removeProduct);
 
-  // useEffect(() => {
-  //   setLoaded(true);
-  // }, []);
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
 
-  // if (!loaded) {
-  //   return <p>Loading...</p>;
-  // }
+  if (!loaded) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>

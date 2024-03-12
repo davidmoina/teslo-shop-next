@@ -3,20 +3,27 @@
 import { useCartStore } from '@/store';
 import { currencyFormat } from '@/utils';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const OrderSummary = () => {
   const router = useRouter();
+  const [loaded, setLoaded] = useState(false);
 
   const { itemsInCart, subtotal, tax, total } = useCartStore((state) =>
     state.getSummaryInformation()
   );
 
   useEffect(() => {
+    setLoaded(true);
+  }, []);
+
+  useEffect(() => {
     if (itemsInCart === 0) {
       router.replace('/empty');
     }
-  }, [itemsInCart]);
+  }, [itemsInCart, loaded]);
+
+  if (!loaded) return <p>Loading...</p>;
 
   return (
     <div className="grid grid-cols-2">
