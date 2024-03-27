@@ -32,7 +32,9 @@ npm run seed
 npx prisma migrate dev
 ```
 
-7. Run project
+7. Remove localStorage to prevent errors
+
+8. Run project
 
 ```
 npm run dev
