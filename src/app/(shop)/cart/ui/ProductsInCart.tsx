@@ -7,7 +7,6 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export const ProductsInCart = () => {
-  //* if hydration fails uncomment the following code
   const [loaded, setLoaded] = useState(false);
   const productsInCart = useCartStore((state) => state.cart);
   const updateProductQuantity = useCartStore(

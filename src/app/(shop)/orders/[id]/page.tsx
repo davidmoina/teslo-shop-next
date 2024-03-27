@@ -1,14 +1,10 @@
+import { getOrderById } from '@/actions';
 import { Title } from '@/components';
-import { initialData } from '@/seed/seed';
+import { currencyFormat } from '@/utils';
 import clsx from 'clsx';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 import { IoCartOutline } from 'react-icons/io5';
-
-const productsInCart = [
-  initialData.products[0],
-  initialData.products[1],
-  initialData.products[2],
-];
 
 interface Props {
   params: {
@@ -16,13 +12,19 @@ interface Props {
   };
 }
 
-export default function OrderPage({ params }: Props) {
+export default async function OrderPage({ params }: Props) {
   const { id } = params;
+
+  const { ok, order } = await getOrderById(id);
+
+  if (!ok || !order) notFound();
+
+  const { OrderAddress, user, OrderItem, ...restOrder } = order;
 
   return (
     <div className="flex justify-center items-center mb-72 px-10 sm:px-0">
       <div className="flex flex-col w-[1000px]">
-        <Title title={`Order #${id}`} />
+        <Title title={`Order #${id.split('-').at(0)}`} />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
           {/* Cart */}
@@ -31,31 +33,37 @@ export default function OrderPage({ params }: Props) {
               className={clsx(
                 'flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5',
                 {
-                  'bg-red-500': true,
-                  'bg-green-700': false,
+                  'bg-red-500': !order.isPaid,
+                  'bg-green-700': order.isPaid,
                 }
               )}
             >
               <IoCartOutline size={30} />
-              <span className="mx-2">Pending payment</span>
-              {/* <span className="mx-2">Paid</span> */}
+              <span className="mx-2">
+                {order.isPaid ? 'Paid' : 'Pending payment'}
+              </span>
             </div>
             {/* Cart Items */}
-            {productsInCart.map((product) => (
-              <div key={product.slug} className="flex">
+            {OrderItem.map((item) => (
+              <div
+                key={`${item.product.slug}-${item.size}`}
+                className="flex items-center rounded-md mb-1"
+              >
                 <Image
-                  src={`/products/${product.images[0]}`}
+                  src={`/products/${item.product.ProductImage[0].url}`}
                   width={100}
                   height={100}
-                  alt={product.title}
-                  className="mr-5 rounded mb-5 w-[100px] h-[100px]"
+                  alt={item.product.title}
+                  className="mr-5 rounded w-[100px] h-[100px]"
                 />
                 <div>
-                  <p>{product.title}</p>
-                  <p>${product.price} x 3</p>
-                  <p className="font-bold">Subtotal: ${product.price * 3}</p>
+                  <p>
+                    {item.size} | {item.product.title} ({item.quantity})
+                  </p>
 
-                  <button className="underline mt-3">Remove</button>
+                  <p className="font-bold">
+                    ${currencyFormat(item.price * item.quantity)}
+                  </p>
                 </div>
               </div>
             ))}
@@ -64,31 +72,42 @@ export default function OrderPage({ params }: Props) {
           {/* Checkout */}
           <div className="bg-white rounded-xl shadow-xl p-7">
             <h2 className="text-2xl font-bold mb-2">Delivery address</h2>
-            <div className="mb-10">
-              <p className="text-xl">User</p>
-              <p>Address</p>
-              <p>Address</p>
-              <p>Address</p>
-              <p>CP: 10000</p>
+            <div className="mb-6">
+              <p className="text-xl">
+                {OrderAddress?.firstName} {OrderAddress?.lastName}
+              </p>
+              <p>{OrderAddress?.address}</p>
+              <p>{OrderAddress?.address2}</p>
+              <p>
+                {OrderAddress?.city}, {OrderAddress?.countryId}
+              </p>
+              <p>CP: {OrderAddress?.postalCode}</p>
+              <p>{OrderAddress?.phone}</p>
             </div>
 
             {/* Divider */}
-            <div className="w-full h-0.5 rounded bg-gray-200 mb-10" />
+            <div className="w-full h-0.5 rounded bg-gray-200 mb-6" />
 
             <h2 className="text-xl mb-2">Cart resume</h2>
 
             <div className="grid grid-cols-2">
               <span>No. products</span>
-              <span className="text-right">3 articles</span>
+              <span className="text-right">{restOrder.itemsInOrder}</span>
 
               <span>Subtotal</span>
-              <span className="text-right">$100</span>
+              <span className="text-right">
+                {currencyFormat(restOrder.subTotal)}
+              </span>
 
               <span>Taxes</span>
-              <span className="text-right">$100</span>
+              <span className="text-right">
+                {currencyFormat(restOrder.tax)}
+              </span>
 
               <span className="mt-5 text-2xl">Total</span>
-              <span className="mt-5 text-2xl text-right">$100</span>
+              <span className="mt-5 text-2xl text-right">
+                {currencyFormat(restOrder.total)}
+              </span>
             </div>
 
             <div className="mt-5 mb-2 w-full">
@@ -96,14 +115,15 @@ export default function OrderPage({ params }: Props) {
                 className={clsx(
                   'flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5',
                   {
-                    'bg-red-500': true,
-                    'bg-green-700': false,
+                    'bg-red-500': !order.isPaid,
+                    'bg-green-700': order.isPaid,
                   }
                 )}
               >
                 <IoCartOutline size={30} />
-                <span className="mx-2">Pending payment</span>
-                {/* <span className="mx-2">Paid</span> */}
+                <span className="mx-2">
+                  {order.isPaid ? 'Paid' : 'Pending payment'}
+                </span>
               </div>
             </div>
           </div>

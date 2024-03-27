@@ -19,6 +19,7 @@ interface Action {
   updateProductQuantity: (product: CartProduct, quantity: number) => void
   removeProduct: (product: CartProduct) => void
   getSummaryInformation: () => SummaryInformation
+  clearCart: () => void
 }
 
 export const useCartStore = create<State & Action>()(
@@ -79,6 +80,9 @@ export const useCartStore = create<State & Action>()(
       const itemsInCart = getTotalItems()
 
       return { subtotal, total, tax, itemsInCart }
+    },
+    clearCart: () => {
+      set({ cart: [] })
     }
   }), {
     name: 'shopping-cart'

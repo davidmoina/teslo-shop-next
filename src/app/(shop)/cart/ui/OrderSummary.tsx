@@ -14,14 +14,14 @@ export const OrderSummary = () => {
   );
 
   useEffect(() => {
-    setLoaded(true);
-  }, []);
-
-  useEffect(() => {
     if (itemsInCart === 0) {
       router.replace('/empty');
     }
   }, [itemsInCart, loaded]);
+
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
 
   if (!loaded) return <p>Loading...</p>;
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { deleteUserAddress, setUserAddress } from '@/actions';
-import { Address, Country } from '@/interfaces';
+import { Address, Country, UserAddress } from '@/interfaces';
 import { useAddressStore } from '@/store';
 import clsx from 'clsx';
 import { useSession } from 'next-auth/react';
@@ -23,12 +23,15 @@ interface FormInputs {
 
 interface Props {
   countries: Country[];
-  userStoredAddress?: Partial<Address> | null;
+  userStoredAddress?: Partial<UserAddress> | null;
 }
 
 // el userId también podría recibirse desde el server component ({countries, userStoredAddress, userId})
 export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
   const router = useRouter();
+
+  const { userId, id, ...rest } = userStoredAddress ?? {};
+
   const {
     handleSubmit,
     register,
@@ -36,7 +39,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
     reset,
   } = useForm<FormInputs>({
     defaultValues: {
-      ...userStoredAddress,
+      ...rest,
       rememberAddress: false,
     },
   });
@@ -56,9 +59,9 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
   }, []);
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
-    setAddress(data);
-
     const { rememberAddress, ...rest } = data;
+
+    setAddress(rest);
 
     if (rememberAddress) {
       await setUserAddress(rest, session!.user.id);
