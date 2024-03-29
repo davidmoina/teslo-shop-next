@@ -1,10 +1,8 @@
 import { getOrderById } from '@/actions';
-import { Title } from '@/components';
+import { IsPaidCard, PayPalButton, Title } from '@/components';
 import { currencyFormat } from '@/utils';
-import clsx from 'clsx';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { IoCartOutline } from 'react-icons/io5';
 
 interface Props {
   params: {
@@ -29,20 +27,7 @@ export default async function OrderPage({ params }: Props) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
           {/* Cart */}
           <div className="flex flex-col mt-5">
-            <div
-              className={clsx(
-                'flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5',
-                {
-                  'bg-red-500': !order.isPaid,
-                  'bg-green-700': order.isPaid,
-                }
-              )}
-            >
-              <IoCartOutline size={30} />
-              <span className="mx-2">
-                {order.isPaid ? 'Paid' : 'Pending payment'}
-              </span>
-            </div>
+            <IsPaidCard isPaid={order.isPaid} />
             {/* Cart Items */}
             {OrderItem.map((item) => (
               <div
@@ -111,20 +96,11 @@ export default async function OrderPage({ params }: Props) {
             </div>
 
             <div className="mt-5 mb-2 w-full">
-              <div
-                className={clsx(
-                  'flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5',
-                  {
-                    'bg-red-500': !order.isPaid,
-                    'bg-green-700': order.isPaid,
-                  }
-                )}
-              >
-                <IoCartOutline size={30} />
-                <span className="mx-2">
-                  {order.isPaid ? 'Paid' : 'Pending payment'}
-                </span>
-              </div>
+              {order.isPaid ? (
+                <IsPaidCard isPaid={order.isPaid} />
+              ) : (
+                <PayPalButton amount={order.total} orderId={order.id} />
+              )}
             </div>
           </div>
         </div>

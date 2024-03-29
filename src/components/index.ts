@@ -11,4 +11,6 @@ export * from './ui/pagination/Pagination';
 export * from './ui/sidebar/Sidebar';
 export * from './ui/title/Title';
 export * from './ui/top-menu/TopMenu';
-export * from './providers/Provider';
+export * from './providers/Providers';
+export * from './order/IsPaidCard';
+export * from './paypal/PayPalButton';
