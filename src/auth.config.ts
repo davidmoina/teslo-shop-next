@@ -6,6 +6,8 @@ import bcrytpjs from 'bcryptjs'
 
 const privateRoutes = [
   '/admin',
+  '/admin/orders',
+  '/admin/users',
   '/checkout',
   '/checkout/address',
   '/profile',
