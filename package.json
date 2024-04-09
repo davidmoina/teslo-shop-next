@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "yarn prisma:deploy && next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "ts-node src/seed/seed-database"
+    "seed": "ts-node src/seed/seed-database",
+    "prisma:deploy": "prisma migrate deploy && prisma generate"
   },
   "dependencies": {
     "@paypal/react-paypal-js": "^8.2.0",
