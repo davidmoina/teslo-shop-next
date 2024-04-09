@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { StyleHTMLAttributes } from 'react';
+import { MouseEventHandler, StyleHTMLAttributes } from 'react';
 
 interface Props {
   src?: string;
@@ -8,9 +8,20 @@ interface Props {
   width: number;
   height: number;
   style?: StyleHTMLAttributes<HTMLImageElement>['style'];
+  onMouseEnter?: MouseEventHandler<HTMLImageElement>;
+  onMouseLeave?: MouseEventHandler<HTMLImageElement>;
 }
 
-export const ProductImage = ({ className, src, alt, height, width }: Props) => {
+export const ProductImage = ({
+  className,
+  src,
+  alt,
+  height,
+  width,
+  onMouseEnter,
+  onMouseLeave,
+  style,
+}: Props) => {
   const localSrc = src
     ? src.startsWith('http')
       ? src
@@ -24,6 +35,9 @@ export const ProductImage = ({ className, src, alt, height, width }: Props) => {
       height={height}
       alt={alt}
       className={className}
+      style={style}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     />
   );
 };
