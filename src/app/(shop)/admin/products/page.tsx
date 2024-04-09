@@ -4,7 +4,6 @@ export const revalidate = 0;
 import { getPaginatedProductsWithImages } from '@/actions';
 import { Pagination, ProductImage, Title } from '@/components';
 import { currencyFormat } from '@/utils';
-import Image from 'next/image';
 
 import Link from 'next/link';
 

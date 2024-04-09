@@ -17,7 +17,7 @@ export const OrderSummary = () => {
     if (itemsInCart === 0) {
       router.replace('/empty');
     }
-  }, [itemsInCart, loaded]);
+  }, [itemsInCart, loaded, router]);
 
   useEffect(() => {
     setLoaded(true);

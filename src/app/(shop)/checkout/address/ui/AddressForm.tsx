@@ -1,7 +1,7 @@
 'use client';
 
 import { deleteUserAddress, setUserAddress } from '@/actions';
-import { Address, Country, UserAddress } from '@/interfaces';
+import { Country, UserAddress } from '@/interfaces';
 import { useAddressStore } from '@/store';
 import clsx from 'clsx';
 import { useSession } from 'next-auth/react';
@@ -56,7 +56,7 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
     if (address.firstName) {
       reset(address);
     }
-  }, []);
+  }, [address, reset]);
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     const { rememberAddress, ...rest } = data;
